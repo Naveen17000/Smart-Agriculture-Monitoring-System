@@ -13,11 +13,11 @@ from tensorflow.keras.models import load_model
 from model import scaler
 import requests
 
-API_KEY = 'pk.eyJ1Ijoic2FjaGluMjAwNSIsImEiOiJjbHcxNWl3ZHcwOHhuMnFtcXZ2dXdoaGJ4In0.sb3rXrdi9oKRjQsL94xCdw'
+API_KEY = 'Your API key'
 
-longitude = 77.000166
-latitude = 11.319813
-zoom_level = 18
+longitude = 77.000166 #Replace with your land
+latitude = 11.319813 #Replace with your land
+zoom_level = 18 #Replace zoom level if needed
 
 url = f'https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/{longitude},{latitude},{zoom_level},0,0/800x600?access_token={API_KEY}'
 
