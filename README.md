@@ -1,5 +1,5 @@
 Python Libraries
-  tkinter (usually comes pre-installed with Python)
+  tkinter (custom Tkinter)
   matplotlib
   pillow
   numpy
