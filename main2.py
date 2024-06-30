@@ -51,6 +51,7 @@ def recommendations():
 
         return irrigation, fertilization, pest_control
 
+
     def on_submit():
         try:
             soil_moisture = float(Soil_moisture)
@@ -82,7 +83,7 @@ def recommendations():
             canvas.draw()
         except Exception as e:
             print(f"Error in update_plot: {e}")
-    def quit():
+    def Quit_mode():
         recommendation_window.destroy()
 
     recommendation_window = ct.CTkToplevel(root)
@@ -132,8 +133,8 @@ def recommendations():
     result_label.pack(padx=10, pady=10)
 
     quit_button = ct.CTkButton(recommendation_window, text="Quit", width=10, font=("Georgia", 18),
-                               command=quit)
-    quit_button.grid(row=11, column=2, padx=(220,10), pady=20, sticky="n")
+                               command=Quit_mode)
+    quit_button.grid(row=11, column=2, padx=(220, 10), pady=20, sticky="n")
 
 
 def change_appearance(new_appearance: str):
@@ -210,6 +211,123 @@ def suggest_crops():
     elif month in ["October", "November", "December"]:
         messagebox.showinfo(title="Suggested Crops", message=f"{crops[3]} are peak growing crops of {month}")
 
+def weather():
+    def get_weather(base_url="http://api.openweathermap.org/data/2.5/weather?",
+                    api_key="a3615c455f40843cb4cc82194e368cd8"):
+        city = combobox.get()
+        if city is None:
+            messagebox.showerror(title="Error", message="Select City ⚠")
+
+        else:
+            url = base_url + "appid=" + api_key + "&q=" + city
+            response = requests.get(url).json()
+
+            temp = round(response["main"]["temp"] - 273)
+            pressure = round(response["main"]["pressure"])
+            humidity = round(response["main"]["humidity"])
+            desc = response["weather"][0]["description"]
+            feel_like = round(response["main"]["feels_like"] - 273)
+            visibility = response['visibility']
+
+            label_temp.configure(text=f"TEMPERATURE\n\n{temp}°C\n🌡")
+            label_pressure.configure(text=f"PRESSURE\n\n{pressure} hPA\n💨")
+            label_humidity.configure(text=f"HUMIDITY\n\n{humidity} %\n💧")
+            label_feel.configure(text=f"FEELS LIKE\n\n{feel_like}°C\n🤒")
+            label_Desc.configure(text=f"DESCRIPTION\n\n{desc}\n⛅")
+            label_visible.configure(text=f"VISIBILITY\n\n{visibility / 1000}Km\n👁")
+
+    indian_cities = [
+        "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai",
+        "Kolkata", "Surat", "Pune", "Jaipur", "Lucknow", "Kanpur", "Nagpur",
+        "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad",
+        "Patna", "Vadodara", "Ghaziabad", "Ludhiana", "Agra", "Nashik",
+        "Faridabad", "Meerut", "Rajkot", "Kalyan-Dombivli", "Vasai-Virar",
+        "Varanasi", "Srinagar", "Aurangabad", "Dhanbad", "Amritsar",
+        "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", "Coimbatore",
+        "Jabalpur", "Gwalior", "Vijayawada", "Jodhpur", "Madurai", "Raipur",
+        "Kota", "Chandigarh", "Guwahati", "Solapur", "Hubli-Dharwad",
+        "Mysore", "Tiruchirappalli", "Bareilly", "Aligarh", "Tiruppur",
+        "Moradabad", "Jalandhar", "Bhubaneswar", "Salem", "Warangal",
+        "Guntur", "Bhiwandi", "Saharanpur", "Gorakhpur", "Bikaner",
+        "Amravati", "Noida", "Jamshedpur", "Bhilai", "Cuttack", "Firozabad",
+        "Kochi", "Nellore", "Bhavnagar", "Dehradun", "Durgapur", "Asansol",
+        "Rourkela", "Nanded", "Kolhapur", "Ajmer", "Akola", "Gulbarga",
+        "Jamnagar", "Ujjain", "Loni", "Siliguri", "Jhansi", "Ulhasnagar",
+        "Nellore", "Sangli-Miraj & Kupwad", "Mangalore", "Erode", "Belgaum",
+        "Ambattur", "Tirunelveli", "Malegaon", "Gaya", "Jalgaon",
+        "Udaipur", "Maheshtala", "Davanagere", "Kozhikode", "Kurnool",
+        "Rajahmundry", "Bokaro", "South Dumdum", "Bellary", "Patiala",
+        "Gopalpur", "Agartala", "Bhagalpur", "Muzaffarnagar", "Bhatpara",
+        "Panihati", "Latur", "Dhule", "Rohtak", "Korba", "Bhilwara",
+        "Brahmapur", "Muzaffarpur", "Ahmednagar", "Mathura", "Kollam",
+        "Avadi", "Kadapa", "Anantapur", "Kamarhati", "Bilaspur", "Sambalpur",
+        "Shahjahanpur", "Satara", "Bijapur", "Kakinada", "Bihar Sharif",
+        "Panipat", "Durg", "Imphal", "Aizawl", "Jhunjhunu", "Sangli",
+        "Agartala", "Karimnagar", "Ichalkaranji", "Puducherry", "Tirupati",
+        "Bellary", "Thanjavur", "Bihar Sharif", "Satna", "Mangalore", "Sikar",
+        "Kumbakonam", "Rampur", "Shivamogga", "Ratlam", "Hapur", "Arrah",
+        "Karur", "Dhule", "Raichur", "Namakkal", "Tiruvannamalai", "Guntakal",
+        "Gandhidham", "Mirzapur", "Palakkad", "Anantapuram", "Kottayam",
+        "Pudukkottai", "Hassan", "Hisar", "Sikar", "Pilibhit", "Rewa", "Satna",
+        "Parbhani", "Tumkur", "Mangalore", "Latur", "Bhimavaram", "Rampur",
+        "Mahbubnagar", "Ahmednagar", "Karimnagar", "Panipat", "Loni",
+        "Nandyal", "Dehri", "Udupi", "Godhra", "Yamunanagar", "Nagaon",
+        "Nandyal", "Tumkur", "Chandrapur", "Unnao", "Tiruvannamalai",
+        "Kolar", "Eluru", "Rewa", "Tonk", "Sambalpur", "Hisar", "Khammam",
+        "Ambala", "Maunath Bhanjan", "Nalgonda", "Muzaffarpur", "Muzaffarnagar",
+        "Ambur", "Purnia", "Buxar", "Darbhanga", "Barh", "Dehri", "Arrah",
+        "Katihar", "Sitamarhi", "Chapra", "Samastipur", "Siwan", "Motihari",
+        "Bettiah", "Supaul", "Saharsa", "Kishanganj", "Munger", "Begusarai",
+        "Jehanabad", "Aurangabad", "Madhubani", "Nalanda", "Gopalganj",
+        "Banka", "Saran", "Bhojpur", "Jamui", "Arwal", "Kaimur", "Sheohar",
+        "Sheikhpura", "Lakhisarai", "Vaishali", "Khagaria", "Madhepura"
+    ]
+    indian_cities = sorted(indian_cities)
+
+    weather_window = ct.CTk()
+    weather_window.title("Weather")
+    weather_window.geometry("1000x700")
+    weather_window.configure(fg_color="#CDE8E5")
+
+    combobox = ct.CTkComboBox(weather_window, values=indian_cities, font=("PT Sans", 18), height=30, width=250)
+    combobox.pack(pady=20)
+
+    combobox.set("Select a city")
+
+    weather = ct.CTkButton(weather_window, text="Find Weather", font=("PT Sans", 18), command=get_weather)
+    weather.pack(pady=10)
+
+    weather_frame1 = ct.CTkFrame(weather_window, width=150, height=150, fg_color="#BED7DC", corner_radius=20)
+    weather_frame1.place(x=230, y=150)
+    label_temp = ct.CTkLabel(weather_frame1, text="TEMPERATURE", font=("PT Sans", 19, "bold"), text_color="#7AB2B2")
+    label_temp.place(x=0, y=10)
+
+    weather_frame2 = ct.CTkFrame(weather_window, width=150, height=150, fg_color="#BED7DC", corner_radius=20)
+    weather_frame2.place(x=430, y=150)
+    label_pressure = ct.CTkLabel(weather_frame2, text="PRESSURE", font=("PT Sans", 20, "bold"), text_color="#7AB2B2")
+    label_pressure.place(x=25, y=10)
+
+    weather_frame3 = ct.CTkFrame(weather_window, width=150, height=150, fg_color="#BED7DC", corner_radius=20)
+    weather_frame3.place(x=630, y=150)
+    label_humidity = ct.CTkLabel(weather_frame3, text="HUMIDITY", font=("PT Sans", 20, "bold"), text_color="#7AB2B2")
+    label_humidity.place(x=25, y=10)
+
+    weather_frame4 = ct.CTkFrame(weather_window, width=150, height=150, fg_color="#BED7DC", corner_radius=20)
+    weather_frame4.place(x=230, y=350)
+    label_feel = ct.CTkLabel(weather_frame4, text="FEELS LIKE", font=("PT Sans", 20, "bold"), text_color="#7AB2B2")
+    label_feel.place(x=25, y=10)
+
+    weather_frame5 = ct.CTkFrame(weather_window, width=150, height=150, fg_color="#BED7DC", corner_radius=20)
+    weather_frame5.place(x=430, y=350)
+    label_Desc = ct.CTkLabel(weather_frame5, text="DESCRIPTION", font=("PT Sans", 18, "bold"), text_color="#7AB2B2")
+    label_Desc.place(x=11, y=10)
+
+    weather_frame6 = ct.CTkFrame(weather_window, width=150, height=150, fg_color="#BED7DC", corner_radius=20)
+    weather_frame6.place(x=630, y=350)
+    label_visible = ct.CTkLabel(weather_frame6, text="VISIBILITY", font=("PT Sans", 20, "bold"), text_color="#7AB2B2")
+    label_visible.place(x=25, y=10)
+
+    weather_window.mainloop()
 def exit_all():
     root.quit()
 
@@ -236,7 +354,7 @@ sidebar_button1.grid(row=1, column=0, padx=20, pady=10)
 sidebar_button2 = ct.CTkButton(sidebar_frame, text="Recommendations", font=("Georgia", 18), command=recommendations)
 sidebar_button2.grid(row=2, column=0, padx=20, pady=10)
 
-sidebar_button3 = ct.CTkButton(sidebar_frame, font=("Georgia", 18), text="Weather Data")
+sidebar_button3 = ct.CTkButton(sidebar_frame, font=("Georgia", 18), text="Weather Data", command=weather)
 sidebar_button3.grid(row=3, column=0, padx=20, pady=10)
 
 sidebar_button4 = ct.CTkButton(sidebar_frame, text="Satellite Image", font=("Georgia", 18), command=open_image_page)
